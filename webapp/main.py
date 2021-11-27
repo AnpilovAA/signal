@@ -46,23 +46,23 @@ def upload():
 @app.route('/get_signal', methods=['GET'])
 def get_signal():
     if request.method == 'GET':
-        search_dict = {}
+        signal_dict = {}
         find_post = db_session.query(
             Signals.id, Signals.image, Signals.updated_at, Signals.topic, Signals.signal,
             Signals.category, Signals.count_likes, Signals.count_dislikes, Signals.author).limit(10)
         if find_post:
             for row in find_post:
                 id, image, date, title, text, categories, likes, dislikes, owner = row
-                search_dict.setdefault('id', []).append(id)
-                search_dict.setdefault('image', []).append(image)
-                search_dict.setdefault('date', []).append(date)
-                search_dict.setdefault('title', []).append(title)
-                search_dict.setdefault('text', []).append(text)
-                search_dict.setdefault('categories', []).append(categories.split(','))
-                search_dict.setdefault('likes', []).append(likes)
-                search_dict.setdefault('dislikes', []).append(dislikes)
-                search_dict.setdefault('owner', []).append(owner)
-        return search_dict
+                signal_dict.setdefault('id', []).append(id)
+                signal_dict.setdefault('image', []).append(image)
+                signal_dict.setdefault('date', []).append(str(date))
+                signal_dict.setdefault('title', []).append(title)
+                signal_dict.setdefault('text', []).append(text)
+                signal_dict.setdefault('categories', []).append(categories.split(','))
+                signal_dict.setdefault('likes', []).append(likes)
+                signal_dict.setdefault('dislikes', []).append(dislikes)
+                signal_dict.setdefault('owner', []).append(owner)
+        return signal_dict
 
 
 @app.route('/search', methods=['GET'])
@@ -90,4 +90,4 @@ def search():
 
 
 if __name__ == "__main__":
-    app.run(host='127.0.0.1')
+    app.run(host='127.0.0.1', debug=True)

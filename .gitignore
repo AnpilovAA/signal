@@ -129,4 +129,4 @@ dmypy.json
 .pyre/
 
 *.bat
-/config/settings.py
+/webapp/settings.py

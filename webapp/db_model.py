@@ -31,6 +31,7 @@ class Users(Base):  # Таблица пользователей
     password = Column(VARCHAR)
     avatar = Column(VARCHAR)
     email = Column(VARCHAR)
+    honor = Column(INTEGER)
 
     def __repr__(self):
         return f"{self.id}, {self.username}"

@@ -10,7 +10,7 @@ from sqlalchemy.sql.operators import ilike_op
 import settings
 from db.db_connect import db_session
 from db_model import (
-    Signals
+    Signals, Users
 )
 
 app = Flask(__name__)
@@ -48,7 +48,7 @@ def get_signal():
     if request.method == 'GET':
         signal_dict = {}
         find_post = db_session.query(
-            Signals.id, Signals.image, Signals.updated_at, Signals.topic, Signals.signal,
+            Users.id, Signals.image, Signals.updated_at, Signals.topic, Signals.signal,
             Signals.category, Signals.count_likes, Signals.count_dislikes, Signals.author).limit(10)
         if find_post:
             for row in find_post:
@@ -87,6 +87,27 @@ def search():
                 search_dict.setdefault('dislikes', []).append(dislikes)
                 search_dict.setdefault('owner', []).append(owner)
         return search_dict
+
+
+@app.route('/profile', methods=['GET'])
+def get_profile():
+    if request.method == 'GET':
+        user_dict = {}
+        arguments = request.args
+        user_id = arguments["id"]
+        find_user = db_session.query(
+            Users.id, Users.first_name, Users.last_name, Users.username, Users.avatar,
+            Users.email).filter(Users.id == int(user_id)).first()
+        print(find_user)
+        if find_user:
+            id, first_name, last_name, username, avatar, email = find_user
+            user_dict.setdefault('id', []).append(id)
+            user_dict.setdefault('first_name', []).append(first_name)
+            user_dict.setdefault('last_name', []).append(last_name)
+            user_dict.setdefault('username', []).append(username)
+            user_dict.setdefault('avatar', []).append(avatar)
+            user_dict.setdefault('email', []).append(email)
+        return user_dict
 
 
 if __name__ == "__main__":

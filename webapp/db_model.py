@@ -4,6 +4,7 @@ from sqlalchemy import (
     INTEGER,
     TIMESTAMP,
     VARCHAR,
+    DATETIME
 )
 
 from sqlalchemy.sql.functions import (
@@ -22,8 +23,8 @@ class Users(Base):  # Таблица пользователей
     id = Column(INTEGER, primary_key=True)
     first_name = Column(VARCHAR)
     last_name = Column(VARCHAR)
-    created_at = Column(TIMESTAMP, nullable=False, default=current_timestamp())
-    updated_at = Column(TIMESTAMP, nullable=False, default=current_timestamp())
+    created_at = Column(VARCHAR, nullable=False, default=current_timestamp())
+    updated_at = Column(VARCHAR, nullable=False, default=current_timestamp())
     status = Column(INTEGER, default=1)
     is_deleted = Column(Boolean, default=False)
     username = Column(VARCHAR)
@@ -46,8 +47,8 @@ class Signals(Base):  # Таблица Signals(Постов)
     signal = Column(VARCHAR)
     category = Column(VARCHAR)
     image = Column(VARCHAR)
-    created_at = Column(TIMESTAMP, nullable=False, default=current_timestamp())
-    updated_at = Column(TIMESTAMP, nullable=False, default=current_timestamp())
+    created_at = Column(VARCHAR, nullable=False, default=current_timestamp())
+    updated_at = Column(VARCHAR, nullable=False, default=current_timestamp())
     status = Column(INTEGER, default=1)
     is_deleted = Column(Boolean, default=False)
 
@@ -62,8 +63,8 @@ class Comments(Base):  # Таблица комментов
     id = Column(INTEGER, primary_key=True)
     user_id = Column(INTEGER)
     signal_id = Column(INTEGER)
-    created_at = Column(TIMESTAMP, nullable=False, default=current_timestamp())
-    updated_at = Column(TIMESTAMP, nullable=False, default=current_timestamp())
+    created_at = Column(VARCHAR, nullable=False, default=current_timestamp())
+    updated_at = Column(VARCHAR, nullable=False, default=current_timestamp())
     comment = Column(VARCHAR)
     is_deleted = Column(Boolean, default=False)
 
@@ -76,8 +77,8 @@ class Like(Base):  # Таблица лайков
 
     id = Column(INTEGER, primary_key=True)
     user_id = Column(INTEGER)
-    created_at = Column(TIMESTAMP, nullable=False, default=current_timestamp())
-    updated_at = Column(TIMESTAMP, nullable=False, default=current_timestamp())
+    created_at = Column(VARCHAR, nullable=False, default=current_timestamp())
+    updated_at = Column(VARCHAR, nullable=False, default=current_timestamp())
     signal_id = Column(INTEGER)
     is_deleted = Column(Boolean, default=False)
     status = Column(Boolean)

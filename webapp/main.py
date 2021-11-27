@@ -1,3 +1,4 @@
+from datetime import datetime
 import json
 
 from flask import (
@@ -10,7 +11,8 @@ from sqlalchemy.sql.operators import ilike_op
 import settings
 from db.db_connect import db_session
 from db_model import (
-    Signals, Users
+    Signals,
+    Users,
 )
 
 app = Flask(__name__)
@@ -50,6 +52,7 @@ def upload():
         f_name = extension
         file.save(settings.UPLOAD_FOLDER + str(f_name))
         return json.dumps({'filename': f'http://161.35.221.241/img/{f_name}'})
+    return {'status': 'Bad method. Use only post'}
 
 
 @app.route('/get_signal', methods=['GET'])
@@ -57,11 +60,13 @@ def get_signal():
     if request.method == 'GET':
         signal_dict = {}
         find_post = db_session.query(
-            Users.id, Signals.image, Signals.updated_at, Signals.topic, Signals.signal,
-            Signals.category, Signals.count_likes, Signals.count_dislikes, Signals.author).limit(10)
+            Signals.id, Signals.image, Signals.updated_at, Signals.topic, Signals.signal,
+            Signals.category, Signals.count_likes, Signals.count_dislikes, Signals.author,
+            Users.first_name, Users.last_name
+        ).join(Users, Signals.id == Signals.author).limit(10)
         if find_post:
             for row in find_post:
-                id, image, date, title, text, categories, likes, dislikes, owner = row
+                id, image, date, title, text, categories, likes, dislikes, owner_id, first_name, last_name = row
                 signal_dict.setdefault('id', []).append(id)
                 signal_dict.setdefault('image', []).append(image)
                 signal_dict.setdefault('date', []).append(str(date))
@@ -70,8 +75,10 @@ def get_signal():
                 signal_dict.setdefault('categories', []).append(categories.split(','))
                 signal_dict.setdefault('likes', []).append(likes)
                 signal_dict.setdefault('dislikes', []).append(dislikes)
-                signal_dict.setdefault('owner', []).append(owner)
+                signal_dict.setdefault('owner_id', []).append(owner_id)
+                signal_dict.setdefault('owner', []).append(first_name + last_name)
         return signal_dict
+    return {'status': 'Bad method. Use only get'}
 
 
 @app.route('/search', methods=['GET'])
@@ -96,31 +103,33 @@ def search():
                 search_dict.setdefault('dislikes', []).append(dislikes)
                 search_dict.setdefault('owner', []).append(owner)
         return search_dict
+    return {'status': 'Bad method. Use only get'}
 
 
 @app.route('/new_signal', methods=["POST"])
 def new_signals():
     if request.method == 'POST':
-        post = request.form['signal']
-        author = request.form['author']
-        likes = request.form['count_likes']
-        dislikes = request.form['count_dislikes']
-        topic = request.form['topic']
-        category = request.form['category']
+        post = request.json['signal']
+        author = request.json['author']
+        likes = request.json['count_likes']
+        dislikes = request.json['count_dislikes']
+        topic = request.json['topic']
+        category = request.json['category']
         new_singal = Signals(
-            author = author,
-            count_likes = likes,
-            signals = post,
-            count_dislikes = dislikes,
-            topic = topic,
-            category = category,
-            created_at = datetime.now(),
-            updated_at = datetime.now()
+            author=author,
+            count_likes=likes,
+            signal=post,
+            count_dislikes=dislikes,
+            topic=topic,
+            category=category,
+            created_at=datetime.now(),
+            updated_at=datetime.now()
         )
-
 
         db_session.add(new_singal)
         db_session.commit()
+        return {'status': 'ok'}
+    return {'status': 'Bad method. Use only post'}
 
 
 @app.route('/profile', methods=['GET'])
@@ -160,6 +169,26 @@ def get_profile():
 
             user_dict.setdefault('signals', post_dict)
         return user_dict
+    return {'status': 'Bad method. Use only get'}
+
+
+@app.route('/update_honor', methods=['POST'])
+def update_honor():
+    if request.method == 'POST':
+        user_id = request.json['id']
+        change_honor = request.json['honor']
+        type_change = request.json['type_change']
+        user_honor = db_session.query(Users.honor).filter(Users.id == int(user_id)).first()
+        if type_change:
+            change_honor = int(user_honor) + int(change_honor)
+        else:
+            change_honor = int(user_honor) - int(change_honor)
+        update_user_honor = {
+            'honor': change_honor, 'updated_at': datetime.now()}
+        db_session.query(Users).filter_by(id=user_id).update(update_user_honor)
+        db_session.commit()
+        return {'honor': 'change_honor'}
+    return {'status': 'Bad method. Use only post'}
 
 
 if __name__ == "__main__":

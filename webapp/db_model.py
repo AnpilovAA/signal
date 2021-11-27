@@ -4,8 +4,8 @@ from sqlalchemy import (
     INTEGER,
     TIMESTAMP,
     VARCHAR,
-
 )
+
 from sqlalchemy.sql.functions import (
     current_timestamp,
 )
@@ -41,7 +41,11 @@ class Signals(Base):  # Таблица Signals(Постов)
     id = Column(INTEGER, primary_key=True)
     author = Column(INTEGER)
     count_likes = Column(VARCHAR)
+    count_dislikes = Column(VARCHAR)
+    topic = Column(VARCHAR)
     signal = Column(VARCHAR)
+    category = Column(VARCHAR)
+    image = Column(VARCHAR)
     created_at = Column(TIMESTAMP, nullable=False, default=current_timestamp())
     updated_at = Column(TIMESTAMP, nullable=False, default=current_timestamp())
     status = Column(INTEGER, default=1)

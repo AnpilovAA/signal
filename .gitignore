@@ -131,4 +131,4 @@ dmypy.json
 migrations/
 *.db
 *.bat
-/config/settings.py
+/webapp/settings.py

@@ -128,10 +128,7 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-<<<<<<< HEAD
-.bat
-.db
-=======
+migrations/
+*.db
 *.bat
 /config/settings.py
->>>>>>> e7ca32f410cd55bd63e318a30d3fc6cf2a8d5a76

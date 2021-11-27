@@ -2,8 +2,8 @@ from flask import Blueprint, render_template, flash, redirect, url_for
 from flask_login import current_user, login_user, logout_user
 from flask import request, jsonify
 
-from webapp import db
-from webapp.auth.models import User
+from db.db_connect import db_session as db
+from db_model import Users
 
 blueprint = Blueprint('auth', __name__)
 

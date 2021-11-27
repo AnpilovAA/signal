@@ -1,7 +1,6 @@
 from flask import Flask, current_app
 from flask_login import LoginManager, login_required, current_user
 from flask_migrate import Migrate
-
 from webapp.db import db
 
 

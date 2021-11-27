@@ -33,7 +33,7 @@ class Users(Base):  # Таблица пользователей
 
     def __repr__(self):
         return f"{self.id}, {self.username}"
-
+    
 
 class Signals(Base):  # Таблица Signals(Постов)
     __tablename__ = "signals"

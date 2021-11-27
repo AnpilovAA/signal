@@ -12,7 +12,7 @@ def login():
     arguments = request.args
     username = arguments["username"]
     password = arguments["password"]
-    all_info = User.query.filter_by(username=username,
+    all_info = Users.query.filter_by(username=username,
     password=password).first()
     if username == all_info.username and password == all_info.password:
         check = {

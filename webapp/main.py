@@ -98,6 +98,31 @@ def search():
         return search_dict
 
 
+@app.route('/new_signal', methods=["POST"])
+def new_signals():
+    if request.method == 'POST':
+        post = request.form['signal']
+        author = request.form['author']
+        likes = request.form['count_likes']
+        dislikes = request.form['count_dislikes']
+        topic = request.form['topic']
+        category = request.form['category']
+        new_singal = Signals(
+            author = author,
+            count_likes = likes,
+            signals = post,
+            count_dislikes = dislikes,
+            topic = topic,
+            category = category,
+            created_at = datetime.now(),
+            updated_at = datetime.now()
+        )
+
+
+        db_session.add(new_singal)
+        db_session.commit()
+
+
 @app.route('/profile', methods=['GET'])
 def get_profile():
     if request.method == 'GET':

@@ -13,4 +13,7 @@ def create_app():
     from webapp.auth.views import blueprint as auth_blueprint
     app.register_blueprint(auth_blueprint)
 
+    from webapp.posts.views import blueprint as posts_blueprint
+    app.register_blueprint(posts_blueprint)
+
     return app

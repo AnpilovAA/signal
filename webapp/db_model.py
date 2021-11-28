@@ -7,6 +7,10 @@ from sqlalchemy import (
     DATETIME
 )
 
+from sqlalchemy.orm import (
+    relationship
+)
+
 from sqlalchemy.sql.functions import (
     current_timestamp,
 )
@@ -62,12 +66,15 @@ class Comments(Base):  # Таблица комментов
     __tablename__ = "comments"
 
     id = Column(INTEGER, primary_key=True)
-    user_id = Column(INTEGER)
-    signal_id = Column(INTEGER)
+    user_id = Column(INTEGER, ForeignKey('Users.id', ondelete='CASCADE'), index=True)
+    signal_id = Column(INTEGER, ForeignKey('Signals.id', ondelete='CASCADE'), index=True)
     created_at = Column(VARCHAR, nullable=False, default=current_timestamp())
     updated_at = Column(VARCHAR, nullable=False, default=current_timestamp())
     comment = Column(VARCHAR)
     is_deleted = Column(Boolean, default=False)
+    
+    signal = relationship('Signals', beckref='comments')
+    users = relationship('Users', backref='comments')
 
     def __repr__(self):
         return f"{self.id}, {self.signal_id}"

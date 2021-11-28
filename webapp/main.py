@@ -13,6 +13,7 @@ from db.db_connect import db_session
 from db_model import (
     Signals,
     Users,
+    Comments
 )
 
 app = Flask(__name__)
@@ -190,6 +191,21 @@ def update_honor():
         return {'honor': 'change_honor'}
     return {'status': 'Bad method. Use only post'}
 
+
+@app.route('/new_comment', methods=['POST'])
+def new_comment():
+    if request.method == 'POST':
+        user_id = request.json['id']
+        comments = request.json['comment']
+        signal = request.json['signal']
+        if db_session.query(Signals.id == comment.id).first(): # проверка комментария к сигналу
+            comment = Comments(
+                comment=comments,
+                user_id=user_id,
+                signal_id=signal
+            )
+            db_session.add(comment)
+            db_session.commit()
 
 if __name__ == "__main__":
     app.run(host='127.0.0.1', debug=True)
